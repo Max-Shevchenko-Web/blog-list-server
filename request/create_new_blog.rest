@@ -1,0 +1,9 @@
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+
+{
+  "title": "Кулинарный блог Оли",
+  "author": "Оля",
+  "url": "//https/olayfoods/blog",
+  "likes": 25
+}
