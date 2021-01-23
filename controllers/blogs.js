@@ -1,18 +1,22 @@
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
 const User = require('../models/user')
+const Comment = require('../models/comment')
 const jwt = require('jsonwebtoken')
 
-// const getTokenFrom = request => {
-//   const authorization = request.get('authorization')
-//   if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
-//     return authorization.substring(7)
-//   }
-//   return null
-// }
-
 blogsRouter.get('/', async (request, response) => {
-  const blogs = await Blog.find({}).populate('user', { username: 1, name: 1, id: 1 })
+  const query = [
+    {
+        path:'user',
+        select: { username: 1, name: 1, id: 1 }
+    },
+    {
+        path:'comments',
+        select: { content: 1, date: 1, user: 1, id: 1}
+    }
+  ]
+
+  const blogs = await Blog.find({}).populate(query)
   response.json(blogs)
 })
 
@@ -90,5 +94,61 @@ blogsRouter.put('/:id', async (request, response) => {
   const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, { new: true }).populate('user', { username: 1, name: 1, id: 1 })
   response.json(updatedBlog)
 })
+
+// create comment to blog
+blogsRouter.post('/:id/comments', async (request, response) => {
+  const token = request.token
+
+  const decodedToken = jwt.verify(token, process.env.SECRET)
+
+  if (!token || !decodedToken.id) {
+    return response.status(401).json({ error: 'token missing or invalid' })
+  }
+
+  const user = await User.findById(decodedToken.id)
+
+  const blog = await Blog.findById(request.params.id)
+
+  const body = request.body
+
+  if (!blog) {
+    response.status(404).end()
+  }
+
+  const comment = new Comment({
+    content: body.content,
+    date: new Date(),
+    user: user._id,
+    blog: blog._id
+  })
+
+  const savedComment = await comment.save()
+  blog.comments = blog.comments.concat(savedComment._id)
+  // user.comments = user.comments.concat(saveComment._id)
+  await blog.save()
+
+  response.status(201).json(savedComment)
+})
+
+// blogsRouter.delete('/:id/comments', async (request, response) => {
+//   // const token = request.token
+
+//   // const decodedToken = jwt.verify(token, process.env.SECRET)
+
+//   // if (!token || !decodedToken.id) {
+//   //   return response.status(401).json({ error: 'token missing or invalid' })
+//   // }
+
+//   // const user = await User.findById(decodedToken.id)
+
+//   const blogForDelete = await Blog.findById(request.params.id)
+//   if (!blogForDelete) {
+//     response.status(404).end()
+//   }
+
+//   await Blog.findByIdAndRemove(request.params.id)
+//   response.status(204).end()
+
+// })
 
 module.exports = blogsRouter
