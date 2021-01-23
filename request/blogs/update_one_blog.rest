@@ -1,0 +1,9 @@
+PUT http://localhost:3001/api/blogs/5fb6ee0fa84561323c37d097
+Content-Type: application/json
+
+{
+  "title": "Кулинарный блог \"Вкуснейшие блюда мира!\" ",
+  "author": "Оля",
+  "url": "//https/olayfoods/blog",
+  "likes": 100
+}

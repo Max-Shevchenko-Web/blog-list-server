@@ -1,0 +1,12 @@
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlVzZXIiLCJpZCI6IjVmYjZjYzg0MGE0ODdhMjg5ODRjMDc1ZSIsImlhdCI6MTYwNTgyMzczMH0.b8S6SQIUTWHLk25maOiQrIajRT5fe7pQU-_zNFMxQ_g
+# Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlVzZXIiLCJpZCI6IjVmYjZjYzg0MGE0ODdhMjg5ODRjMDc1ZSIsImlhdCI6MTYwNTgyMjgzNX0.w2ogOrCCo1CRXjZjT2H5MoVJYNJ_x1oS8255jc4X
+
+{
+  "title": "Кулинарный блог \"Вкуснейшие блюда мира!\" ",
+  "author": "Оля",
+  "url": "//https/olayfoods/blog",
+  "likes": 25,
+  "userId":"5fb6cc840a487a28984c075e"
+}
