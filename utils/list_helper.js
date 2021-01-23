@@ -28,12 +28,61 @@ const favouriteBlog = (blogs) => {
   }
 }
 
-// Можно с Lodash
-// const mostBlogs
-//  Определите функцию с именем mostBlogs, которая получает массив блогов в качестве параметра. Функция возвращает автора , у которого больше всего блогов. Возвращаемое значение также содержит количество блогов, которые ведет ведущий автор:
+const mostBlogs = blogs => {
+  const authors = {};
+  let mostBlogsValue = 0;
+  let authorWithMostBlogs = null;
 
-// const mostLikes
-//  Определите функцию с именем mostLikes, которая принимает в качестве параметра массив блогов. Функция возвращает автора, чьи сообщения в блоге набирают наибольшее количество лайков. Возвращаемое значение также содержит общее количество лайков, которые получил автор:
+  if (!blogs.length) return null;
+
+  blogs.forEach(blog => {
+    if (authors.hasOwnProperty(blog.author)) {
+      authors[blog.author]++;
+    } else {
+      authors[blog.author] = 1;
+    }
+  });
+
+  for (author of Object.keys(authors)) {
+    if (authors[author] > mostBlogsValue) {
+      authorWithMostBlogs = author;
+      mostBlogsValue = authors[author];
+    }
+  }
+
+  return {
+    author: authorWithMostBlogs,
+    blogs: mostBlogsValue
+  };
+};
+
+const mostLikes = blogs => {
+  const authors = {};
+  let mostLikesValue = 0;
+  let authorWithMostLikes = null;
+
+  if (!blogs.length) return null;
+
+  blogs.forEach(blog => {
+    if (authors.hasOwnProperty(blog.author)) {
+      authors[blog.author] += blog.likes;
+    } else {
+      authors[blog.author] = blog.likes;
+    }
+  });
+
+  for (author of Object.keys(authors)) {
+    if (authors[author] > mostLikesValue) {
+      authorWithMostLikes = author;
+      mostLikesValue = authors[author];
+    }
+  }
+
+  return {
+    author: authorWithMostLikes,
+    likes: mostLikesValue
+  };
+};
 
 module.exports = {
   dummy,
